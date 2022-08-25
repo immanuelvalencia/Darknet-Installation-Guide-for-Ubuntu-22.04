@@ -1,6 +1,5 @@
 # CUDA 11.7 and cuDNN 8.4.0 for Ubuntu 22.04
 
-
 ## Initial setup
 *For fresh Ubuntu 22.04 Installation*
 
@@ -94,3 +93,39 @@
     Build cuda_11.7.r11.7/compiler.31442593_0
 
 
+## cuDNN 8.4.0.27 Installation
+The process here are taken from the official documentation
+https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#install-linux
+1. **Download cuDNN v8.4.0 for CUDA 11.x**
+https://developer.nvidia.com/rdp/cudnn-archive
+	Local Installer for Ubuntu20.04 x86_64 (Deb)
+
+2. Open your terminal and navigate to your Downloads folder or where you saved the deb file.
+
+	    cd Downloads
+	    
+ 3. Run the following codes
+	
+	**3.1 Enable the local repository**
+	 ``` sudo dpkg -i cudnn-local-repo-ubuntu2004-8.4.0.27_1.0-1_amd64.deb```
+	 
+	 **3.2 Import the CUDA GPG key.**
+	```sudo apt-key add /var/cudnn-local-repo-ubuntu2004-8.4.0.27/7fa2af80.pub```
+
+	**3.3 Refresh the repository metadata.**
+	```sudo apt-get update```
+	
+	**3.4 Install the runtime, developer libraries and code samples**
+	```sudo apt-get install libcudnn8=8.4.0.27-1+cuda11.6```
+	```sudo apt-get install libcudnn8-dev=8.4.0.27-1+cuda11.6```
+	```sudo apt-get install libcudnn8-samples=8.4.0.27-1+cuda11.6```
+	```sudo apt-get install libfreeimage3 libfreeimage-dev```
+	**3.5 Verifying the install**
+	```cp -r /usr/src/cudnn_samples_v8/ $HOME```
+	```cd  $HOME/cudnn_samples_v8/mnistCUDNN```
+	```make clean && make```
+	```./mnistCUDNN```
+
+
+	If cuDNN is properly installed and running on your Linux system, you will see a message similar to the following:
+	> Test passed!
