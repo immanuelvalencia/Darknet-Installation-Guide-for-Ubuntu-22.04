@@ -1,4 +1,10 @@
-# CUDA 11.7 and cuDNN 8.4.0 for Ubuntu 22.04
+# Darknet Installation Guide for Ubuntu 22.04
+This repository contains the procedure on how to install CUDA Toolkit 11.7, cuDNN  8.4.0.27, OpenCV and Darknet for YOLO in Ubuntu 22.04 
+
+**Requirements**
+ - Ubuntu 22.04 LTS
+ - NVIDIA GPU
+ 
 
 ## Initial setup
 *For fresh Ubuntu 22.04 Installation*
@@ -74,7 +80,7 @@
 		+-----------------------------------------------------------------------------+
 		| Processes:                                                                  |
 		|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
-		|        ID   ID                                                   Usage      |
+		|        ID   ID                                                   Usage      | 8.4.0.27 8.4.0.27
 		|=============================================================================|
 		|    0   N/A  N/A      1995      G   /usr/lib/xorg/Xorg                202MiB |
 		|    0   N/A  N/A      2355      G   /usr/bin/gnome-shell               29MiB |
@@ -129,3 +135,57 @@ https://developer.nvidia.com/rdp/cudnn-archive
 
 	If cuDNN is properly installed and running on your Linux system, you will see a message similar to the following:
 	> Test passed!
+	
+## OpenCV Installation
+Credits to https://www.ccoderun.ca/programming/darknet_faq/#opencv_and_cuda
+
+You definitely should  _NOT_  build OpenCV by hand! Yes, we know about the many tutorials. But it is difficult to do it correctly, and very easy to get it wrong. OpenCV is a complex library, with many optional modules. Some of those modules are not optional for Darknet, and many OpenCV tutorials don't include them.
+
+Instead, please follow the standard way to install OpenCV for your operating system. On Debian-based Linux distributions, it is a single command that should look similar to this:
+
+    sudo apt-get install libopencv-dev
+    
+## Darknet Installation
+
+1. Install git
+``` sudo apt install git```
+
+2. Git clone darknet to your device
+``` git clone https://github.com/AlexeyAB/darknet```
+
+3. Navigate to your darknet folder
+``` cd darknet```
+
+4. Edit the Makefile
+``` gedit Makefile```
+
+5. Change the following
+	```
+	GPU=1
+	CUDNN=1
+	CUDNN_HALF=1
+	OPENCV=1
+	```
+	Then navigate down to Line 20. Remove the following
+	```
+	ARCH= -gencode arch=compute_35,code=sm_35 \
+    -gencode arch=compute_50,code=[sm_50,compute_50] \
+    -gencode arch=compute_52,code=[sm_52,compute_52] \
+	-gencode arch=compute_61,code=[sm_61,compute_61]
+	```
+	
+	Then scroll further down and find your GPU.
+	Delete the # to uncomment the line. 
+	(Example: If your GPU is RTX 2060, uncommentthe line with arch=compute_75)
+
+	  ```ARCH= -gencode arch=compute_75,code=[sm_75,compute_75]```
+	   
+	See full list in the following link
+	https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+
+
+
+6. Install darknet. Run the following code
+```make -j8```
+
+
